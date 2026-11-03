@@ -32,6 +32,7 @@ export default function TabelaProdutos (props) {
                 <TableCell>Nome</TableCell>
                 <TableCell>Valor</TableCell>
                 <TableCell>Estoque</TableCell>
+                <TableCell>Ações</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
