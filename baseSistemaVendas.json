@@ -1,10 +1,10 @@
 {
   "produtos": [
     {
-      "id": "Dgseo32jZSk",
       "nome": "Notebook Dell XPS 15",
-      "valor": 7800,
-      "estoque": 8
+      "valor": "7800",
+      "estoque": "8",
+      "id": "Dgseo32jZSk"
     },
     {
       "id": "bs9Bb9oAh2p",
@@ -145,10 +145,10 @@
       "estoque": 41
     },
     {
-      "id": "e8DeJxoVORP",
       "nome": "Memória RAM Crucial 16GB DDR4 Lite 460",
-      "valor": 706.01,
-      "estoque": 35
+      "valor": "706.01",
+      "estoque": "36",
+      "id": "e8DeJxoVORP"
     },
     {
       "id": "CK9SctSzlgZ",
@@ -1799,6 +1799,12 @@
       "nome": "Carregador Anker 65W Slim 395",
       "valor": 153.45,
       "estoque": 35
+    },
+    {
+      "nome": "processador ryza 5600 T",
+      "valor": "600",
+      "estoque": "11",
+      "id": "5OSKyMZa8-g"
     }
   ],
   "clientes": [

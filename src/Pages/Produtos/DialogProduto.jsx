@@ -1,12 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
+import { useState } from "react";
 
 export default function DialogProduto (props) {
-
     function enviar(formdata){
+        
         let produto = {
             nome:formdata.get("nome"),
             valor:formdata.get("valor"),
             estoque:formdata.get("estoque")
+        }
+        if(produto.valor>0 && produto.estoque){
+            <Alert severity="error">Valores negativos não são aceitos</Alert>
         }
         return props.onEnviar(produto)
     }
@@ -26,8 +30,8 @@ export default function DialogProduto (props) {
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button color="warning" type="button" onClick={props.onCancelar}>Cancelar</Button>
-                    <Button color="primary" type="submit">
+                    <Button variant="contained" color="warning" type="button" onClick={props.onCancelar}>Cancelar</Button>
+                    <Button variant="contained" color="primary" type="submit">
                     {props.produtoParaEditar?"Atualizar":"Cadastrar"}
                     </Button>
                 </DialogActions>

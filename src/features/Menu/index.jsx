@@ -16,7 +16,7 @@ export default function Menu(props){
                         <Venda fontSize="large"/>
                     </IconButton>
                     <Typography sx={{ml:2}} variant="h4" >Sistema de vendas</Typography>
-                    <Box sx={{ display: "flex", flexGrow: 0.7, justifyContent: "space-around" }}>
+                    <Box sx={{ display: "flex", flexGrow: 0.7, justifyContent: "space-around", padding:1.2 , gap:2 }}>
                         {paginas.map(pagina=>
                             <Button
                             key={pagina.caminho}

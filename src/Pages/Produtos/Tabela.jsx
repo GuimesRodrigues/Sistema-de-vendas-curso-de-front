@@ -1,13 +1,17 @@
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, TextField } from "@mui/material";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
 export default function TabelaProdutos (props) {
     const [produtoParaExcluir, setProdutoParaExcluir] = useState (null)
 
     async function confirmarExclusao() {
         await props.onExcluir(produtoParaExcluir.id)
         setProdutoParaExcluir(null)
+    }
+    function pesquisar(fromData){
+        props.onPesquisar(fromData.get("pesquisa"))
     }
 
     return <>
@@ -23,7 +27,25 @@ export default function TabelaProdutos (props) {
                 <Button onClick={confirmarExclusao} color="primary">Confirmar</Button>
             </DialogActions>
         </Dialog>}
+        <Box>
+            <form action={pesquisar}>
+                <TextField
+                    label="pesquisa"
+                    name="pesquisa"
+                    slotProps={{
+                        input:{
+                            endAdornment:
+                            <InputAdornment position="end">
+                                <IconButton type="submit">
+                                    <SearchIcon/>
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    }}
+                />
 
+            </form>
+        </Box>
 
         <Table>
         <TableHead>
