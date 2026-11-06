@@ -2,17 +2,22 @@ import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack
 import { useState } from "react";
 
 export default function DialogProduto (props) {
+    const [erro, setErro] = useState(null)
     function enviar(formdata){
-        
         let produto = {
             nome:formdata.get("nome"),
-            valor:formdata.get("valor"),
-            estoque:formdata.get("estoque")
+            valor:Number(formdata.get("valor")),
+            estoque:Number(formdata.get("estoque"))
         }
-        if(produto.valor>0 && produto.estoque){
-            <Alert severity="error">Valores negativos não são aceitos</Alert>
+
+        let valor = produto.valor
+        let estoque = produto.estoque
+        if( valor<0 || estoque<0){
+            setErro(<Alert severity="error">Valores negativos não são aceitos</Alert>)
+        }   else {
+            setErro(null)
+            return props.onEnviar(produto)
         }
-        return props.onEnviar(produto)
     }
 
     return <>
@@ -23,7 +28,8 @@ export default function DialogProduto (props) {
                     `Editar produto ID:${props.produtoParaEditar.id}`:"Cadastro de Produto"}
                 </DialogTitle>
                 <DialogContent>
-                    <Stack spacing={2} sx={{mt:2}}>
+                    {erro}
+                <Stack spacing={2} sx={{mt:2}}>
                         <TextField label="Nome" name="nome" defaultValue={props.produtoParaEditar?.nome} variant="outlined" required fullWidth />
                         <TextField label="Valor" name="valor" defaultValue={props.produtoParaEditar?.valor} variant="outlined" required fullWidth />
                         <TextField label="Estoque" name="estoque" defaultValue={props.produtoParaEditar?.estoque} variant="outlined" required fullWidth />
@@ -35,6 +41,7 @@ export default function DialogProduto (props) {
                     {props.produtoParaEditar?"Atualizar":"Cadastrar"}
                     </Button>
                 </DialogActions>
+
             </form>
         </Dialog>
     </>

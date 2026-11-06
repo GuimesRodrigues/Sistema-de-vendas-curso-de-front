@@ -1805,6 +1805,12 @@
       "valor": "600",
       "estoque": "11",
       "id": "5OSKyMZa8-g"
+    },
+    {
+      "nome": "Desenvolvimento de APIs",
+      "valor": 200,
+      "estoque": 500,
+      "id": "uBhi72BdBBM"
     }
   ],
   "clientes": [
