@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import TabelaCliente from "./TabelaCliente";
 import api from "../../services/api";
 import { useEffect, useState } from "react";
@@ -47,6 +47,16 @@ export default function Cliente(props){
     return<>
     <Paper>
     <Typography sx={{ p: 1, mt: 1 }} align="center" variant="h4">Gestão de Clientes</Typography>
+    <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+            setClienteEditar(null);
+            setDialogCliente(true);
+        }}
+    >
+        Cadastrar Novo Cliente
+    </Button>
     {dialogAberto && <DialogCliente
                         clienteEditar={clienteEditar}
                         onEnviar={enviar}
