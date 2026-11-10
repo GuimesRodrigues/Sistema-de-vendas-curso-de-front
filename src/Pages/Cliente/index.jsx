@@ -1,7 +1,69 @@
-import { Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
+import TabelaCliente from "./TabelaCliente";
+import api from "../../services/api";
+import { useEffect, useState } from "react";
+import DialogCliente from "./DialogCliente";
+export default function Cliente(props){
+    const [paginacao, setPaginacao] = useState({ pagina: 1, totalPagina: 1 });
+    const [clientes, setClientes] = useState ([])
+    const [clienteEditar, setClienteEditar] = useState(null)
+    const [dialogAberto, setDialogCliente] = useState(false)
 
-export default function Cliente(){
+    async function busacarCliente() {
+        let params = { _page: paginacao.pagina, _per_page: 10 }
+   
+    let retorno = await api.get(`/clientes`, { params: params });
+    setClientes(retorno.data.data)
+    setPaginacao({
+            pagina: paginacao.pagina,
+            totalPagina: retorno.data.pages
+        });
+        
+    }
+    useEffect(() => { busacarCliente() }, [paginacao.pagina])
+    console.log(clientes)
+
+    async function excluirCliente(id) {
+        await api.delete(`/clientes/${id}`);
+        busacarCliente();
+    }
+
+    async function editarCliente(id) {
+        const retorno = await api.get(`/clientes/${id}`)
+        setClienteEditar(retorno.data)
+        setDialogCliente(true)
+    }
+
+    async function enviar(cliente) {
+        if (clienteEditar) {
+            await api.put(`/clientes/${clienteEditar.id}`, cliente);
+        } else {
+            await api.post("/clientes", cliente);
+        }
+        busacarCliente()
+        setDialogCliente(false)
+        setClienteEditar(null)
+    }
     return<>
-    <Paper>Esta e a pagina de Cliente</Paper>
+    <Paper>
+    <Typography sx={{ p: 1, mt: 1 }} align="center" variant="h4">Gestão de Clientes</Typography>
+    {dialogAberto && <DialogCliente
+                        clienteEditar={clienteEditar}
+                        onEnviar={enviar}
+                        onClienteEditar={editarCliente}
+                        onCancelar={() => {
+                            setDialogCliente(false);
+                            setClienteEditar(null);
+                        }}
+                    />}
+    <TabelaCliente
+    clientes={clientes}
+    paginacao={paginacao}
+    onExcluir={excluirCliente}
+    onClienteEditar={editarCliente}
+    onMudarPagina={novaPagina =>
+                    setPaginacao({ ...paginacao, pagina: novaPagina })}
+    />
+    </Paper>
     </>
 }
