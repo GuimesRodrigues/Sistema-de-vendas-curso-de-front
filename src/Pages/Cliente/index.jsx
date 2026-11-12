@@ -3,24 +3,32 @@ import TabelaCliente from "./TabelaCliente";
 import api from "../../services/api";
 import { useEffect, useState } from "react";
 import DialogCliente from "./DialogCliente";
+import { cpf } from "cpf-cnpj-validator";
 export default function Cliente(props){
     const [paginacao, setPaginacao] = useState({ pagina: 1, totalPagina: 1 });
     const [clientes, setClientes] = useState ([])
     const [clienteEditar, setClienteEditar] = useState(null)
     const [dialogAberto, setDialogCliente] = useState(false)
+    const [pesquisa, setPesquisa] = useState("")
 
     async function busacarCliente() {
-        let params = { _page: paginacao.pagina, _per_page: 10 }
-   
+    let params = { _page: paginacao.pagina, _per_page: 10 }
+    if (pesquisa) {
+    if (/^[\d.\-\s]+$/.test(pesquisa)) {
+        params["cpf:contains"] = cpf.format(pesquisa);
+    } else {
+        params["nome:contains"] = pesquisa;
+    }
+}
     let retorno = await api.get(`/clientes`, { params: params });
     setClientes(retorno.data.data)
     setPaginacao({
             pagina: paginacao.pagina,
             totalPagina: retorno.data.pages
         });
-        
+        console.log(pesquisa)
     }
-    useEffect(() => { busacarCliente() }, [paginacao.pagina])
+    useEffect(() => { busacarCliente() }, [paginacao.pagina,pesquisa])
     console.log(clientes)
 
     async function excluirCliente(id) {
@@ -56,7 +64,9 @@ export default function Cliente(props){
         }}
     >
         Cadastrar Novo Cliente
+        
     </Button>
+    <br/><br/>
     {dialogAberto && <DialogCliente
                         clienteEditar={clienteEditar}
                         onEnviar={enviar}
@@ -69,6 +79,7 @@ export default function Cliente(props){
     <TabelaCliente
     clientes={clientes}
     paginacao={paginacao}
+    onPesquisar={texto=>setPesquisa(texto)}
     onExcluir={excluirCliente}
     onClienteEditar={editarCliente}
     onMudarPagina={novaPagina =>

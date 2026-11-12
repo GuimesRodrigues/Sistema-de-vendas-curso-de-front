@@ -17,6 +17,7 @@
     "@mui/material": "^9.5.0",
     "@mui/x-date-pickers": "^9.16.0",
     "axios": "^1.20.0",
+    "cpf-cnpj-validator": "^2.1.2",
     "dayjs": "^1.11.23",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

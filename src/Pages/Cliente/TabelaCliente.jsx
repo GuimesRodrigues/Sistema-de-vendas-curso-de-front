@@ -2,6 +2,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, TextField } from "@mui/material";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useState } from 'react';
+import { cpf, cnpj } from 'cpf-cnpj-validator'
 import SearchIcon from '@mui/icons-material/Search';
 export default function TabelaCliente(props) {
     const [clienteParaExcluir, setClienteParaExcluir] = useState(null)
@@ -9,6 +10,9 @@ export default function TabelaCliente(props) {
     async function confirmarExclusao() {
         await props.onExcluir(clienteParaExcluir.id)
         setClienteParaExcluir(null)
+    }
+    function pesquisar(fromData){
+        props.onPesquisar(fromData.get("pesquisa"))
     }
 
     return <>
@@ -24,6 +28,24 @@ export default function TabelaCliente(props) {
                 <Button onClick={confirmarExclusao} color="primary">Confirmar</Button>
             </DialogActions>
         </Dialog>}
+        <Box>
+            <form action={pesquisar}>
+                <TextField
+                label="Pesquisa"
+                name='pesquisa'
+                slotProps={{
+                    input:{
+                        endAdornment:
+                        <InputAdornment position='end'>
+                        <IconButton type='submit'>
+                            <SearchIcon/>
+                        </IconButton>
+                        </InputAdornment>
+                    }
+                }}
+                />
+            </form>
+        </Box>
         <Table>
             <TableHead>
                 <TableRow>
