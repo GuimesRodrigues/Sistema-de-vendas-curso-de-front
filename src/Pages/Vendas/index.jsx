@@ -1,10 +1,13 @@
-import { Paper } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import TabelaVendas from "./TabelaVendas";
+import DialogDetalheVenda from "./DialogDetalheVenda";
 export default function Vendas(){
     const [vendas,setVendas] = useState([])
     const [paginacao, setPaginacao] = useState({pagina:1,totalPagina:1})
+    const [dialogPreenchido,setDialogPreenchido] = useState(null)
+    const [dialogVenda, setDialogVenda] = useState(false)
     
     async function buscarVendas() {
         let params = {_page:paginacao.pagina, _per_page:10}
@@ -19,11 +22,44 @@ export default function Vendas(){
     }
     useEffect(()=>{buscarVendas()},[paginacao.pagina])
     
+    async function abrirDetalhes(id){
+        const retorno= await api.get(`/vendas/${id}`)
+        setDialogPreenchido(retorno.data)
+        setDialogVenda(true)
+    }
+
+    async function enviar(venda) {
+        await api.post("/venda", venda)
+        buscarVendas()
+        setDialogVenda(false)
+        setDialogPreenchido(null)
+    }
+    
     return<>
-    <Paper>
+    <Paper sx={{ p: 1, mt: 1}}>
+        <Typography sx={{ p: 1, mt: 1 }} align="center" variant="h4">Gestão de Vendas</Typography>
+        <br/>
+        {dialogVenda && dialogPreenchido &&
+                        <DialogDetalheVenda
+                            dialogPreenchido={dialogPreenchido}
+                            onFechar={() => {
+                                setDialogVenda(false)
+                                setDialogPreenchido(null)
+                            }}
+                        />
+                    }
+        <Button 
+        variant="contained"
+        color="primary"
+        onClick={()=>setDialogVenda(true)}>
+
+            Registrar nova venda
+
+        </Button>
         <TabelaVendas
             vendas={vendas}
             paginacao={paginacao}
+            onAbrirDetalhes={abrirDetalhes}
             onMudarPagina={novaPagina =>
                 setPaginacao({ ...paginacao, pagina: novaPagina })}
         />

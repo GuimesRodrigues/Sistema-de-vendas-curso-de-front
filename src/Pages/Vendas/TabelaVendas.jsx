@@ -1,5 +1,5 @@
-import { Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from "@mui/material";
-
+import { IconButton, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Tooltip } from "@mui/material";
+import Detalhes from '@mui/icons-material/LoupeOutlined';
 export default function TabelaVendas(props) {
     return <Table>
         <TableHead>
@@ -8,6 +8,7 @@ export default function TabelaVendas(props) {
                 <TableCell>Cliente</TableCell>
                 <TableCell>Data</TableCell>
                 <TableCell>Produtos</TableCell>
+                <TableCell>Ações</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
@@ -22,6 +23,13 @@ export default function TabelaVendas(props) {
                                 {produto.idProduto} (quantidade: {produto.quantidade})
                             </div>
                         )}
+                    </TableCell>
+                    <TableCell>
+                        <Tooltip title="Detalhes da venda">
+                            <IconButton onClick={()=>props.onAbrirDetalhes(venda.id)}>
+                                <Detalhes color="success"/>
+                            </IconButton>
+                        </Tooltip>    
                     </TableCell>
                 </TableRow>
             )}
