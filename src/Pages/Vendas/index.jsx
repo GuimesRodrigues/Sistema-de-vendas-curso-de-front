@@ -8,6 +8,25 @@ export default function Vendas(){
     const [paginacao, setPaginacao] = useState({pagina:1,totalPagina:1})
     const [dialogPreenchido,setDialogPreenchido] = useState(null)
     const [dialogVenda, setDialogVenda] = useState(false)
+    const [clientes, setClientes] = useState([])
+    const [produtos, setProdutos] = useState([])
+
+    async function buscarClientes() {
+        let params = { _per_page: 100 }
+        let retorno = await api.get("/clientes", { params: params })
+        setClientes(retorno.data.data || retorno.data)
+    }
+
+    async function buscarProdutos() {
+        let params = { _per_page: 100 }
+        let retorno = await api.get("/produtos", { params: params })
+        setProdutos(retorno.data.data || retorno.data)
+    }
+
+    useEffect(() => {
+        buscarClientes()
+        buscarProdutos()
+    }, [])
     
     async function buscarVendas() {
         let params = {_page:paginacao.pagina, _per_page:10}
@@ -42,6 +61,8 @@ export default function Vendas(){
         {dialogVenda && dialogPreenchido &&
                         <DialogDetalheVenda
                             dialogPreenchido={dialogPreenchido}
+                            clientes={clientes}
+                            produtos={produtos}
                             onFechar={() => {
                                 setDialogVenda(false)
                                 setDialogPreenchido(null)
@@ -58,6 +79,8 @@ export default function Vendas(){
         </Button>
         <TabelaVendas
             vendas={vendas}
+            clientes={clientes}
+            produtos={produtos}
             paginacao={paginacao}
             onAbrirDetalhes={abrirDetalhes}
             onMudarPagina={novaPagina =>

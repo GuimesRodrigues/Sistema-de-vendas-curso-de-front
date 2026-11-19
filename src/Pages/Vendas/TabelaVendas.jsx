@@ -1,6 +1,22 @@
 import { IconButton, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Tooltip } from "@mui/material";
 import Detalhes from '@mui/icons-material/LoupeOutlined';
 export default function TabelaVendas(props) {
+    const clientes = props.clientes || []
+    const produtos = props.produtos || []
+    const vendas = props.vendas || []
+
+    function buscarCliente(venda) {
+        return clientes.find(cliente =>
+            String(cliente.id) === String(venda.idCliente)
+        )
+    }
+
+    function buscarProduto(produto) {
+        return produtos.find(item =>
+            String(item.id) === String(produto.idProduto)
+        )
+    }
+
     return <Table>
         <TableHead>
             <TableRow>
@@ -12,15 +28,22 @@ export default function TabelaVendas(props) {
             </TableRow>
         </TableHead>
         <TableBody>
-            {props.vendas.map(venda =>
+            {vendas.map(venda =>
                 <TableRow key={venda.id}>
                     <TableCell>{venda.id}</TableCell>
-                    <TableCell>{venda.idCliente}</TableCell>
+                    <TableCell>
+                    {buscarCliente(venda)
+                        ? `${buscarCliente(venda).nome} (${buscarCliente(venda).id})`
+                        : venda.idCliente}
+                    </TableCell>
                     <TableCell>{new Date(venda.data).toLocaleString("pt-BR")}</TableCell>
                     <TableCell>
                         {venda.produtos.map(produto =>
                             <div key={produto.idProduto}>
-                                {produto.idProduto} (quantidade: {produto.quantidade})
+                                {buscarProduto(produto)
+                                    ? `${buscarProduto(produto).nome} (${buscarProduto(produto).id})`
+                                    : produto.idProduto}
+                                {" "}(quantidade: {produto.quantidade})
                             </div>
                         )}
                     </TableCell>

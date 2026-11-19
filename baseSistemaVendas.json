@@ -1811,6 +1811,18 @@
       "valor": 200,
       "estoque": 500,
       "id": "uBhi72BdBBM"
+    },
+    {
+      "nome": "Teclado gamer",
+      "valor": 120,
+      "estoque": 30,
+      "id": "8xwsFMbCy40"
+    },
+    {
+      "nome": "Teclado BluDragon",
+      "valor": 400,
+      "estoque": 30,
+      "id": "Bla1610fdYw"
     }
   ],
   "clientes": [

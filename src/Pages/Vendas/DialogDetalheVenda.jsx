@@ -1,12 +1,29 @@
 import {Button,Dialog,DialogActions,DialogContent,DialogTitle,Stack,TextField,Typography} from "@mui/material";
 
-export default function DialogDetalheVenda({ dialogPreenchido, onFechar }) {
-    const dataVenda = dialogPreenchido.data
-        ? new Date(dialogPreenchido.data).toLocaleString("pt-BR")
+export default function DialogDetalheVenda(props) {
+    let clientes = props.clientes || []
+    let produtos = props.produtos || []
+
+    const dataVenda = props.dialogPreenchido.data
+        ? new Date(props.dialogPreenchido.data).toLocaleString("pt-BR")
         : "Não informada";
 
+    const cliente = clientes.find(item =>
+        String(item.id) === String(props.dialogPreenchido.idCliente)
+    )
+
+    function buscarProduto(produto) {
+        const item = produtos.find(produtoEncontrado =>
+            String(produtoEncontrado.id) === String(produto.idProduto)
+        )
+
+        return item
+            ? `${item.nome} (${item.id})`
+            : produto.idProduto || "Não informado"
+    }
+
     return (
-        <Dialog open fullWidth maxWidth="sm" onClose={onFechar}>
+        <Dialog open fullWidth maxWidth="sm" onClose={props.onFechar}>
             <DialogTitle align="center">
                 Detalhes da venda
             </DialogTitle>
@@ -14,13 +31,15 @@ export default function DialogDetalheVenda({ dialogPreenchido, onFechar }) {
                 <Stack spacing={2} sx={{ mt: 1 }}>
                     <TextField
                         label="ID da venda"
-                        value={dialogPreenchido.id || "Não informado"}
+                        value={props.dialogPreenchido.id || "Não informado"}
                         fullWidth
                         disabled
                     />
                     <TextField
-                        label="ID do cliente"
-                        value={dialogPreenchido.idCliente || "Não informado"}
+                        label="Cliente"
+                        value={cliente
+                            ? `${cliente.nome} (${cliente.id})`
+                            : props.dialogPreenchido.idCliente || "Não informado"}
                         fullWidth
                         disabled
                     />
@@ -31,16 +50,16 @@ export default function DialogDetalheVenda({ dialogPreenchido, onFechar }) {
                         disabled
                     />
                     <Typography variant="h6">Produtos</Typography>
-                    {dialogPreenchido.produtos?.length
-                        ? dialogPreenchido.produtos.map((produto, index) => (
+                    {props.dialogPreenchido.produtos?.length
+                        ? props.dialogPreenchido.produtos.map((produto, index) => (
                             <Stack
                                 key={`${produto.idProduto}-${index}`}
                                 direction="row"
                                 spacing={2}
                             >
                                 <TextField
-                                    label="ID do produto"
-                                    value={produto.idProduto}
+                                    label="Produto"
+                                    value={buscarProduto(produto)}
                                     fullWidth
                                     disabled
                                 />
@@ -55,7 +74,7 @@ export default function DialogDetalheVenda({ dialogPreenchido, onFechar }) {
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" onClick={onFechar}>
+                <Button variant="contained" onClick={props.onFechar}>
                     Fechar
                 </Button>
             </DialogActions>
