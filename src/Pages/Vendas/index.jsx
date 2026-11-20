@@ -59,7 +59,7 @@ export default function Vendas(){
 
     async function enviar(venda) {
         await api.post("/vendas", venda)
-        await buscarVendas()
+        buscarVendas()
         setDialogVenda(false)
         setDialogPreenchido(null)
     }
