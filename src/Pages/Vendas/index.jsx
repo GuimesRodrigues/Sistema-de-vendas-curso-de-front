@@ -12,15 +12,25 @@ export default function Vendas(){
     const [produtos, setProdutos] = useState([])
 
     async function buscarClientes() {
-        let params = { _per_page: 100 }
+        let params = {_page:paginacao.pagina, _per_page:10}
         let retorno = await api.get("/clientes", { params: params })
-        setClientes(retorno.data.data || retorno.data)
+        setClientes(retorno.data.data)
+        setPaginacao({
+            pagina: paginacao.pagina,
+            totalPagina: retorno.data.pages
+            
+        })
     }
 
     async function buscarProdutos() {
-        let params = { _per_page: 100 }
+        let params = {_page:paginacao.pagina, _per_page:10}
         let retorno = await api.get("/produtos", { params: params })
-        setProdutos(retorno.data.data || retorno.data)
+        setProdutos(retorno.data.data)
+        setPaginacao({
+            pagina: paginacao.pagina,
+            totalPagina: retorno.data.pages
+            
+        })
     }
 
     useEffect(() => {
@@ -48,8 +58,8 @@ export default function Vendas(){
     }
 
     async function enviar(venda) {
-        await api.post("/venda", venda)
-        buscarVendas()
+        await api.post("/vendas", venda)
+        await buscarVendas()
         setDialogVenda(false)
         setDialogPreenchido(null)
     }
@@ -58,11 +68,12 @@ export default function Vendas(){
     <Paper sx={{ p: 1, mt: 1}}>
         <Typography sx={{ p: 1, mt: 1 }} align="center" variant="h4">Gestão de Vendas</Typography>
         <br/>
-        {dialogVenda && dialogPreenchido &&
+        {dialogVenda &&
                         <DialogDetalheVenda
                             dialogPreenchido={dialogPreenchido}
                             clientes={clientes}
                             produtos={produtos}
+                            onEnviar={enviar}
                             onFechar={() => {
                                 setDialogVenda(false)
                                 setDialogPreenchido(null)
@@ -72,7 +83,10 @@ export default function Vendas(){
         <Button 
         variant="contained"
         color="primary"
-        onClick={()=>setDialogVenda(true)}>
+        onClick={() => {
+            setDialogPreenchido(null)
+            setDialogVenda(true)
+        }}>
 
             Registrar nova venda
 
